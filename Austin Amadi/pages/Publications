@@ -1,0 +1,187 @@
+import React from "react";
+import { motion } from "framer-motion";
+import { BookOpen, Download, ShoppingCart, Star } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "@/utils";
+
+export default function Publications() {
+  const books = [
+    {
+      id: 1,
+      title: "Transform Your Life: A 90-Day Journey",
+      description: "A comprehensive guide to creating lasting change through proven strategies and daily practices.",
+      price: 29.99,
+      cover: "from-blue-500 to-cyan-500",
+      rating: 4.8,
+      reviews: 342
+    },
+    {
+      id: 2,
+      title: "Unlocking Your Potential",
+      description: "Discover the hidden barriers holding you back and learn to break through to extraordinary success.",
+      price: 24.99,
+      cover: "from-purple-500 to-pink-500",
+      rating: 4.9,
+      reviews: 578
+    },
+    {
+      id: 3,
+      title: "The Power of Purposeful Living",
+      description: "Find your true purpose and align your daily actions with your deepest values.",
+      price: 27.99,
+      cover: "from-orange-500 to-red-500",
+      rating: 4.7,
+      reviews: 421
+    },
+    {
+      id: 4,
+      title: "Mindset Mastery",
+      description: "Develop an unshakeable mindset that propels you toward your goals no matter the obstacles.",
+      price: 32.99,
+      cover: "from-green-500 to-emerald-500",
+      rating: 4.9,
+      reviews: 693
+    },
+  ];
+
+  return (
+    <div className="min-h-screen">
+      {/* Hero Section */}
+      <section className="relative py-20 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center"
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full mb-6">
+              <BookOpen className="w-4 h-4" />
+              <span className="text-sm font-medium">Bestselling Author</span>
+            </div>
+            <h1 className="text-5xl md:text-6xl font-bold mb-6">Events & Publications</h1>
+            <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto">
+              Transformative books and resources to support your personal growth journey
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Books Grid */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              Featured Publications
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Download instantly and start your transformation today
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+            {books.map((book, index) => (
+              <motion.div
+                key={book.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <Card className="overflow-hidden hover:shadow-2xl transition-shadow h-full">
+                  <div className={`h-64 bg-gradient-to-br ${book.cover} flex items-center justify-center relative`}>
+                    <div className="text-white text-center p-8">
+                      <BookOpen className="w-20 h-20 mx-auto mb-4 opacity-50" />
+                      <p className="text-sm opacity-75">Book Cover Placeholder</p>
+                    </div>
+                    <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full">
+                      <div className="flex items-center gap-1">
+                        <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                        <span className="font-bold text-sm">{book.rating}</span>
+                        <span className="text-xs text-gray-600">({book.reviews})</span>
+                      </div>
+                    </div>
+                  </div>
+                  <CardContent className="p-6">
+                    <h3 className="text-2xl font-bold mb-3">{book.title}</h3>
+                    <p className="text-gray-600 mb-4 line-clamp-3">{book.description}</p>
+                    <div className="flex items-center justify-between">
+                      <div className="text-3xl font-bold text-indigo-600">
+                        ${book.price}
+                      </div>
+                      <Link
+                        to={`${createPageUrl("PurchaseBook")}?bookId=${book.id}&title=${encodeURIComponent(book.title)}&price=${book.price}`}
+                      >
+                        <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white">
+                          <ShoppingCart className="w-4 h-4 mr-2" />
+                          Buy Now
+                        </Button>
+                      </Link>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* What You'll Get Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              What You'll Get
+            </h2>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                icon: Download,
+                title: "Instant Access",
+                description: "Download immediately after purchase and start reading right away"
+              },
+              {
+                icon: BookOpen,
+                title: "Lifetime Access",
+                description: "Keep your books forever and revisit them anytime you need"
+              },
+              {
+                icon: Star,
+                title: "Bonus Content",
+                description: "Exclusive worksheets, exercises, and resources included"
+              },
+            ].map((feature, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="text-center"
+              >
+                <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center">
+                  <feature.icon className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
+                <p className="text-gray-600">{feature.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}

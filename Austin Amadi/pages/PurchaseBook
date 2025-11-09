@@ -1,0 +1,278 @@
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { BookOpen, User, Mail, DollarSign, Download, CheckCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
+import { base44 } from "@/api/base44Client";
+
+export default function PurchaseBook() {
+  const [bookDetails, setBookDetails] = useState(null);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: ""
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isPurchased, setIsPurchased] = useState(false);
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const bookId = urlParams.get('bookId');
+    const title = urlParams.get('title');
+    const price = urlParams.get('price');
+
+    if (bookId && title && price) {
+      setBookDetails({
+        id: bookId,
+        title: decodeURIComponent(title),
+        price: parseFloat(price)
+      });
+    }
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const downloadUrl = `https://example.com/downloads/${bookDetails.title.replace(/\s+/g, '-').toLowerCase()}.pdf`;
+
+      await base44.entities.BookPurchase.create({
+        buyer_name: formData.name,
+        buyer_email: formData.email,
+        book_title: bookDetails.title,
+        book_price: bookDetails.price,
+        payment_status: "paid",
+        download_url: downloadUrl
+      });
+
+      await base44.integrations.Core.SendEmail({
+        to: formData.email,
+        subject: `Your Book Purchase - ${bookDetails.title}`,
+        body: `
+          Hi ${formData.name},
+          
+          Thank you for purchasing "${bookDetails.title}"!
+          
+          Your book is ready for download. Click the link below to download:
+          ${downloadUrl}
+          
+          This link will remain active, so you can download the book anytime.
+          
+          Enjoy your reading and your transformation journey!
+          
+          Best regards,
+          Austin Amadi
+        `
+      });
+
+      setIsPurchased(true);
+    } catch (error) {
+      console.error("Error processing purchase:", error);
+    }
+
+    setIsSubmitting(false);
+  };
+
+  if (!bookDetails) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 to-purple-50">
+        <Card>
+          <CardContent className="p-12 text-center">
+            <p className="text-xl text-gray-600">Loading book details...</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (isPurchased) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 to-purple-50 p-4">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="max-w-2xl w-full"
+        >
+          <Card className="shadow-2xl">
+            <CardContent className="p-12 text-center">
+              <div className="w-20 h-20 mx-auto mb-6 bg-green-100 rounded-full flex items-center justify-center">
+                <CheckCircle className="w-10 h-10 text-green-600" />
+              </div>
+              <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                Purchase Complete!
+              </h2>
+              <p className="text-xl text-gray-600 mb-8">
+                Your book has been sent to {formData.email}
+              </p>
+              <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl p-6 mb-8">
+                <BookOpen className="w-16 h-16 mx-auto mb-4 text-indigo-600" />
+                <h3 className="text-2xl font-bold mb-2">{bookDetails.title}</h3>
+                <p className="text-gray-600">
+                  Check your email for the download link. The book is yours to keep forever!
+                </p>
+              </div>
+              <div className="space-y-4">
+                <p className="text-gray-600">
+                  <strong>Note:</strong> In a production environment, the download would start automatically
+                  or a secure download link would be provided in your email.
+                </p>
+                <Button
+                  className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white"
+                  onClick={() => window.location.href = "/Publications"}
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Browse More Books
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50">
+      {/* Hero Section */}
+      <section className="relative py-20 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center"
+          >
+            <h1 className="text-5xl md:text-6xl font-bold mb-6">Complete Your Purchase</h1>
+            <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto">
+              You're one step away from transforming your life
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Content */}
+      <section className="py-20">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Book Details */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+            >
+              <Card className="h-full">
+                <CardContent className="p-8">
+                  <h2 className="text-2xl font-bold mb-6 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                    Your Selection
+                  </h2>
+                  <div className="bg-gradient-to-br from-indigo-100 to-purple-100 rounded-xl p-6 mb-6">
+                    <BookOpen className="w-16 h-16 mx-auto mb-4 text-indigo-600" />
+                    <h3 className="text-xl font-bold text-center mb-2">{bookDetails.title}</h3>
+                  </div>
+
+                  <div className="space-y-4 mb-6">
+                    <div className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                      <span>Instant digital download</span>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                      <span>Lifetime access to your purchase</span>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                      <span>Bonus worksheets and resources</span>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                      <span>PDF format - read on any device</span>
+                    </div>
+                  </div>
+
+                  <div className="border-t pt-6">
+                    <div className="flex justify-between items-center text-2xl font-bold">
+                      <span>Total:</span>
+                      <span className="text-indigo-600">${bookDetails.price.toFixed(2)}</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            {/* Purchase Form */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+            >
+              <Card className="h-full">
+                <CardContent className="p-8">
+                  <h2 className="text-2xl font-bold mb-6 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                    Your Information
+                  </h2>
+
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                    <div>
+                      <label className="block text-sm font-medium mb-2 flex items-center gap-2">
+                        <User className="w-4 h-4" /> Full Name
+                      </label>
+                      <Input
+                        required
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        placeholder="Your name"
+                        className="h-12"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium mb-2 flex items-center gap-2">
+                        <Mail className="w-4 h-4" /> Email Address
+                      </label>
+                      <Input
+                        required
+                        type="email"
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        placeholder="your@email.com"
+                        className="h-12"
+                      />
+                      <p className="text-sm text-gray-500 mt-2">
+                        We'll send your download link to this email
+                      </p>
+                    </div>
+
+                    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                      <p className="text-sm text-gray-700">
+                        <strong>Note:</strong> This is a purchase form. In a production environment,
+                        secure payment processing would be integrated here. The book download link
+                        will be sent to your email after completing the form.
+                      </p>
+                    </div>
+
+                    <Button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white h-14 text-lg"
+                    >
+                      {isSubmitting ? (
+                        "Processing..."
+                      ) : (
+                        <>
+                          <DollarSign className="w-5 h-5 mr-2" />
+                          Complete Purchase - ${bookDetails.price.toFixed(2)}
+                        </>
+                      )}
+                    </Button>
+
+                    <p className="text-center text-sm text-gray-500">
+                      🔒 Secure checkout · Your information is protected
+                    </p>
+                  </form>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}

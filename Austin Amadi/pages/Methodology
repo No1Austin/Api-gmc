@@ -1,0 +1,226 @@
+import React from "react";
+import { motion } from "framer-motion";
+import { Brain, Target, Rocket, Users, Lightbulb, TrendingUp, CheckCircle } from "lucide-react";
+
+export default function Methodology() {
+  return (
+    <div className="min-h-screen">
+      {/* Hero Section */}
+      <section className="relative py-20 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center"
+          >
+            <h1 className="text-5xl md:text-6xl font-bold mb-6">My Coaching Methodology</h1>
+            <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto">
+              A proven framework for sustainable transformation and lasting success
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Overview Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl font-bold mb-6 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              The TRANSFORM Framework
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              My unique 7-step methodology combines psychology, neuroscience, and proven coaching
+              techniques to create breakthrough results in your life.
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Steps Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="space-y-16">
+            {[
+              {
+                step: "01",
+                icon: Target,
+                title: "Clarity & Vision",
+                description: "Define your authentic goals and create a compelling vision for your future",
+                color: "from-blue-500 to-cyan-500",
+                points: [
+                  "Identify core values and life priorities",
+                  "Set specific, measurable outcomes",
+                  "Create a vivid picture of your ideal future"
+                ]
+              },
+              {
+                step: "02",
+                icon: Brain,
+                title: "Self-Awareness",
+                description: "Understand your current patterns, beliefs, and behaviors",
+                color: "from-purple-500 to-pink-500",
+                points: [
+                  "Uncover limiting beliefs holding you back",
+                  "Recognize behavioral patterns",
+                  "Identify strengths and growth areas"
+                ]
+              },
+              {
+                step: "03",
+                icon: Lightbulb,
+                title: "Strategy Development",
+                description: "Create a customized action plan tailored to your unique situation",
+                color: "from-orange-500 to-red-500",
+                points: [
+                  "Design personalized strategies",
+                  "Break down goals into actionable steps",
+                  "Create accountability systems"
+                ]
+              },
+              {
+                step: "04",
+                icon: Rocket,
+                title: "Implementation",
+                description: "Take consistent action and build momentum towards your goals",
+                color: "from-green-500 to-emerald-500",
+                points: [
+                  "Execute your action plan",
+                  "Build new empowering habits",
+                  "Overcome obstacles as they arise"
+                ]
+              },
+              {
+                step: "05",
+                icon: TrendingUp,
+                title: "Progress Tracking",
+                description: "Monitor your growth and celebrate wins along the journey",
+                color: "from-indigo-500 to-blue-500",
+                points: [
+                  "Measure progress against benchmarks",
+                  "Adjust strategies based on results",
+                  "Recognize and celebrate achievements"
+                ]
+              },
+              {
+                step: "06",
+                icon: Users,
+                title: "Support & Accountability",
+                description: "Receive ongoing guidance and maintain momentum",
+                color: "from-pink-500 to-rose-500",
+                points: [
+                  "Regular coaching sessions",
+                  "Between-session support",
+                  "Community connection opportunities"
+                ]
+              },
+              {
+                step: "07",
+                icon: CheckCircle,
+                title: "Integration & Mastery",
+                description: "Solidify new patterns and prepare for sustained success",
+                color: "from-yellow-500 to-orange-500",
+                points: [
+                  "Integrate new behaviors into daily life",
+                  "Develop self-coaching capabilities",
+                  "Create systems for ongoing growth"
+                ]
+              },
+            ].map((step, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className={`flex flex-col md:flex-row gap-8 items-start ${
+                  index % 2 === 0 ? "" : "md:flex-row-reverse"
+                }`}
+              >
+                <div className="md:w-1/2">
+                  <div className={`inline-block px-4 py-2 bg-gradient-to-r ${step.color} text-white rounded-full text-sm font-bold mb-4`}>
+                    STEP {step.step}
+                  </div>
+                  <div className={`w-16 h-16 mb-6 bg-gradient-to-br ${step.color} rounded-xl flex items-center justify-center`}>
+                    <step.icon className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-3xl font-bold mb-4">{step.title}</h3>
+                  <p className="text-lg text-gray-600 mb-6">{step.description}</p>
+                  <ul className="space-y-3">
+                    {step.points.map((point, i) => (
+                      <li key={i} className="flex items-start gap-3">
+                        <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-1" />
+                        <span className="text-gray-700">{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="md:w-1/2">
+                  <div className={`aspect-square rounded-2xl bg-gradient-to-br ${step.color} opacity-10`}></div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Why It Works Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-4xl font-bold mb-6 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              Why This Methodology Works
+            </h2>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-8 md:p-12"
+          >
+            <div className="grid md:grid-cols-2 gap-8">
+              <div>
+                <h3 className="text-2xl font-bold mb-4">Evidence-Based</h3>
+                <p className="text-gray-700">
+                  Grounded in psychological research and neuroscience, incorporating proven
+                  techniques from cognitive behavioral therapy, positive psychology, and
+                  performance coaching.
+                </p>
+              </div>
+              <div>
+                <h3 className="text-2xl font-bold mb-4">Personalized</h3>
+                <p className="text-gray-700">
+                  No two clients are the same. This framework adapts to your unique situation,
+                  challenges, and goals, ensuring you receive truly customized support.
+                </p>
+              </div>
+              <div>
+                <h3 className="text-2xl font-bold mb-4">Action-Oriented</h3>
+                <p className="text-gray-700">
+                  Theory without practice is ineffective. This methodology emphasizes taking
+                  consistent action and building momentum towards your goals.
+                </p>
+              </div>
+              <div>
+                <h3 className="text-2xl font-bold mb-4">Sustainable</h3>
+                <p className="text-gray-700">
+                  Focused on creating lasting change, not quick fixes. You'll develop the
+                  skills and mindsets to continue growing long after our work together ends.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+    </div>
+  );
+}

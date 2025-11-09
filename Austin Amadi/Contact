@@ -1,0 +1,211 @@
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { Mail, Phone, MapPin, Send, CheckCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent } from "@/components/ui/card";
+import { base44 } from "@/api/base44Client";
+
+export default function Contact() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: ""
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      await base44.integrations.Core.SendEmail({
+        to: "austin@example.com",
+        subject: `Contact Form: ${formData.subject}`,
+        body: `
+          Name: ${formData.name}
+          Email: ${formData.email}
+          Subject: ${formData.subject}
+          
+          Message:
+          ${formData.message}
+        `
+      });
+
+      setIsSubmitted(true);
+      setFormData({ name: "", email: "", subject: "", message: "" });
+      
+      setTimeout(() => {
+        setIsSubmitted(false);
+      }, 5000);
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
+
+    setIsSubmitting(false);
+  };
+
+  return (
+    <div className="min-h-screen">
+      {/* Hero Section */}
+      <section className="relative py-20 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center"
+          >
+            <h1 className="text-5xl md:text-6xl font-bold mb-6">Get In Touch</h1>
+            <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto">
+              Have questions? I'd love to hear from you. Send me a message and I'll respond as soon as possible.
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Contact Content */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-3 gap-8">
+            {/* Contact Info Cards */}
+            <div className="lg:col-span-1 space-y-6">
+              {[
+                {
+                  icon: Mail,
+                  title: "Email",
+                  content: "austin@example.com",
+                  color: "from-blue-500 to-cyan-500"
+                },
+                {
+                  icon: Phone,
+                  title: "Phone",
+                  content: "+1 (555) 123-4567",
+                  color: "from-purple-500 to-pink-500"
+                },
+                {
+                  icon: MapPin,
+                  title: "Location",
+                  content: "Los Angeles, CA",
+                  color: "from-orange-500 to-red-500"
+                },
+              ].map((item, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <Card className="hover:shadow-lg transition-shadow">
+                    <CardContent className="p-6">
+                      <div className={`w-12 h-12 mb-4 bg-gradient-to-br ${item.color} rounded-xl flex items-center justify-center`}>
+                        <item.icon className="w-6 h-6 text-white" />
+                      </div>
+                      <h3 className="font-bold text-lg mb-2">{item.title}</h3>
+                      <p className="text-gray-600">{item.content}</p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Contact Form */}
+            <div className="lg:col-span-2">
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+              >
+                <Card className="shadow-xl">
+                  <CardContent className="p-8">
+                    <h2 className="text-3xl font-bold mb-6 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                      Send Me a Message
+                    </h2>
+
+                    {isSubmitted ? (
+                      <div className="text-center py-12">
+                        <div className="w-20 h-20 mx-auto mb-6 bg-green-100 rounded-full flex items-center justify-center">
+                          <CheckCircle className="w-10 h-10 text-green-600" />
+                        </div>
+                        <h3 className="text-2xl font-bold mb-2">Message Sent!</h3>
+                        <p className="text-gray-600">
+                          Thank you for reaching out. I'll get back to you soon.
+                        </p>
+                      </div>
+                    ) : (
+                      <form onSubmit={handleSubmit} className="space-y-6">
+                        <div className="grid md:grid-cols-2 gap-6">
+                          <div>
+                            <label className="block text-sm font-medium mb-2">Name</label>
+                            <Input
+                              required
+                              value={formData.name}
+                              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                              placeholder="Your name"
+                              className="h-12"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium mb-2">Email</label>
+                            <Input
+                              required
+                              type="email"
+                              value={formData.email}
+                              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                              placeholder="your@email.com"
+                              className="h-12"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium mb-2">Subject</label>
+                          <Input
+                            required
+                            value={formData.subject}
+                            onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                            placeholder="What's this about?"
+                            className="h-12"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium mb-2">Message</label>
+                          <Textarea
+                            required
+                            value={formData.message}
+                            onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                            placeholder="Tell me more..."
+                            className="min-h-[200px] resize-none"
+                          />
+                        </div>
+
+                        <Button
+                          type="submit"
+                          disabled={isSubmitting}
+                          className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white h-12 text-lg"
+                        >
+                          {isSubmitting ? (
+                            "Sending..."
+                          ) : (
+                            <>
+                              <Send className="w-5 h-5 mr-2" />
+                              Send Message
+                            </>
+                          )}
+                        </Button>
+                      </form>
+                    )}
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}

@@ -1,0 +1,48 @@
+{
+  "name": "BookPurchase",
+  "type": "object",
+  "properties": {
+    "buyer_name": {
+      "type": "string",
+      "description": "Name of the person purchasing the book"
+    },
+    "buyer_email": {
+      "type": "string",
+      "format": "email",
+      "description": "Email of the buyer"
+    },
+    "book_title": {
+      "type": "string",
+      "description": "Title of the book purchased"
+    },
+    "book_price": {
+      "type": "number",
+      "description": "Price of the book"
+    },
+    "payment_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "paid",
+        "refunded"
+      ],
+      "default": "pending",
+      "description": "Payment status"
+    },
+    "download_url": {
+      "type": "string",
+      "description": "URL for book download"
+    },
+    "downloaded": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the book has been downloaded"
+    }
+  },
+  "required": [
+    "buyer_name",
+    "buyer_email",
+    "book_title",
+    "book_price"
+  ]
+}

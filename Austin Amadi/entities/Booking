@@ -1,0 +1,63 @@
+{
+  "name": "Booking",
+  "type": "object",
+  "properties": {
+    "client_name": {
+      "type": "string",
+      "description": "Name of the client booking the session"
+    },
+    "client_email": {
+      "type": "string",
+      "format": "email",
+      "description": "Email of the client"
+    },
+    "session_type": {
+      "type": "string",
+      "enum": [
+        "30min",
+        "1hour"
+      ],
+      "description": "Type of coaching session"
+    },
+    "price": {
+      "type": "number",
+      "description": "Price paid for the session"
+    },
+    "session_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Preferred date and time for the session"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "confirmed",
+        "completed",
+        "cancelled"
+      ],
+      "default": "pending",
+      "description": "Booking status"
+    },
+    "payment_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "paid",
+        "refunded"
+      ],
+      "default": "pending",
+      "description": "Payment status"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes from the client"
+    }
+  },
+  "required": [
+    "client_name",
+    "client_email",
+    "session_type",
+    "price"
+  ]
+}
